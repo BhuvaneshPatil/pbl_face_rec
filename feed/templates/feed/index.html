@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static '/css/styles.css/' %}">
+</head>
+<body>
+<h1>Hi</h1>
+<div style="border:2px solid red" >
+    <img src='{% url "feed:video" %}'>
+    <form action="{% url 'feed:base' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="roll" required>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+</body>
+</html>
