@@ -8,6 +8,8 @@ pip = "*"
 opencv-python = "*"
 django = "*"
 pillow = "*"
+dlib = "*"
+face-detection = "*"
 
 [dev-packages]
 

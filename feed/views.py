@@ -17,8 +17,12 @@ import numpy as np
 camera = cv2.VideoCapture(0)  # use 0 for web camera
 
 
-def gen_frames():  # generate frame by frame from camera
-    images, Names = defdata.define()
+def gen_frames():  # generate frame by frame from camerapipe
+    all_data = Student.objects.all()
+    for each in all_data:
+        print(each.photo)
+
+    images, Names = defdata.define(all_data)
     print(Names)
     encodeListKnown = defdata.encodings(images)
     while True:
@@ -44,7 +48,7 @@ def gen_frames():  # generate frame by frame from camera
                 # as we are giving list as input to faceDis we will get list as output
                 # We will get 3 output as we have given 3 input and the lowest will be the match
                 matchIndex = np.argmin(faceDis)
-
+            #
                 if matches[matchIndex]:
                     name = Names[matchIndex].upper()
                     print(name)
@@ -68,6 +72,9 @@ def feedView(request):
 
 @csrf_exempt
 def index(request):
+    # all_data = Student.objects.all()
+
+    # print(all_data[0].photo)
     if request.method == "POST":
         data= request.POST
         success, image = camera.read()
