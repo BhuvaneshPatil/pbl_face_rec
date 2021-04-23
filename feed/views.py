@@ -24,8 +24,6 @@ def gen_frames():  # generate frame by frame from camerapipe
     all_data = Student.objects.all()
     print(len(all_data))
     if len(all_data) > 0:
-        for each in all_data:
-            print(each.photo)
 
         images, Names = defdata.define(all_data)
         print(Names)
@@ -40,54 +38,32 @@ def gen_frames():  # generate frame by frame from camerapipe
                 #  We can find multiple face so to give face locations and send it to encoding fucntion
                 #  Encoding the capured image
                 imgS = cv2.cvtColor(imgS, cv2.COLOR_BGR2RGB)
+
                 faceCurr = face_recognition.face_locations(imgS)
                 encodeCurr = face_recognition.face_encodings(imgS, faceCurr)
+
+                # Finding matches
                 for encodeFace, faceLoc in zip(encodeCurr, faceCurr):
                     # matches gives bollean output if which of the face is matching
-                    try:
-                        matches = face_recognition.compare_faces(
-                            encodeListKnown, encodeFace
-                        )
-                        # the lower the face disatnce the better the match is
-                        faceDis = face_recognition.face_distance(
-                            encodeListKnown, encodeFace
-                        )
-                        # as we are giving list as input to faceDis we will get list as output
-                        # We will get 3 output as we have given 3 input and the lowest will be the match
-                        matchIndex = np.argmin(faceDis)
-                        matchIndex = len(matches) - 1
-                        print(len(matches))
-                        # Finding matches
-                        if matches[len(matches) - 1]:
-                            name = Names[matchIndex].upper()
-                            print(name, "bhuvi")
-                            y1, x2, y2, x1 = faceLoc
-                            y1, x2, y2, x1 = (
-                                y1 * 4,
-                                x2 * 4,
-                                y2 * 4,
-                                x1 * 4,
-                            )  # since we resized it we are incrasing the size
-                            cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                            cv2.rectangle(
-                                frame, (x1, y2 - 35), (x2, y2), (0, 255, 0), cv2.FILLED
-                            )
-                            cv2.putText(
-                                frame,
-                                name,
-                                (x1 + 6, y2 - 6),
-                                cv2.FONT_HERSHEY_COMPLEX,
-                                1,
-                                (255, 255, 255),
-                                2,
-                            )
-                    except ValueError:
-                        print("in the except")
-                    pass
+                    matches = face_recognition.compare_faces(encodeListKnown, encodeFace)
+                    # the lower the face disatnce the better the match is
+                    faceDis = face_recognition.face_distance(encodeListKnown, encodeFace)
+                    # as we are giving list as input to faceDis we will get list as output
+                    # We will get 3 output as we have given 3 input and the lowest will be the match
+                    matchIndex = np.argmin(faceDis)
+
+                    if matches[matchIndex]:
+                        name = Names[matchIndex].upper()
+                        print(name)
+                        y1, x2, y2, x1 = faceLoc
+                        y1, x2, y2, x1 = y1 * 4, x2 * 4, y2 * 4, x1 * 4  # since we resized it we are incrasing the size
+                        cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                        cv2.rectangle(frame, (x1, y2 - 35), (x2, y2), (0, 255, 0), cv2.FILLED)
+                        cv2.putText(frame, name, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
 
             ret, buffer = cv2.imencode(".jpg", frame)
             frame = buffer.tobytes()
-            yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n")
+            yield b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n"
 
 
 def feedView(request):
@@ -123,3 +99,4 @@ def feedView(request):
 #         current_image = cv2.imwrite('opencv.png', gen_frames)
 #         print(current_image)
 #
+

@@ -13,10 +13,10 @@ def define(allStudents):
 
     # myList.remove('.DS_Store')
     for each in allStudents:
-        print(each.photo)
-        currimg = cv2.imread(f'{path}/{each.photo}')  # reading the image with the help of path of image
+
+        currimg = face_recognition.load_image_file(f'{path}/{each.photo}')  # reading the image with the help of path of image
         data.append(currimg)
-        Names.append(each.rollNo)  # names of all the data
+        Names.append(each.name)  # names of all the data
     # print(data)
     return data, Names
 
@@ -26,6 +26,10 @@ def encodings(images):
     for img in images:
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         encode = face_recognition.face_encodings(img)
-        encodeList.append(encode)
+        if len(encode) > 0:
+            biden_encoding = encode[0]
+        else:
+            print("No faces found in the image!")
+        encodeList.append(biden_encoding)
     # print(encodeList)
     return encodeList
