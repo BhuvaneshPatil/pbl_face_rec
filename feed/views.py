@@ -17,10 +17,9 @@ import numpy as np
 
 # Create your views here.
 
-camera = cv2.VideoCapture(0)  # use 0 for web camera
-
 
 def gen_frames():  # generate frame by frame from camerapipe
+    camera = cv2.VideoCapture(0)  # use 0 for web camera
     all_data = Student.objects.all()
     print(len(all_data))
     if len(all_data) > 0:
@@ -45,9 +44,13 @@ def gen_frames():  # generate frame by frame from camerapipe
                 # Finding matches
                 for encodeFace, faceLoc in zip(encodeCurr, faceCurr):
                     # matches gives bollean output if which of the face is matching
-                    matches = face_recognition.compare_faces(encodeListKnown, encodeFace)
+                    matches = face_recognition.compare_faces(
+                        encodeListKnown, encodeFace
+                    )
                     # the lower the face disatnce the better the match is
-                    faceDis = face_recognition.face_distance(encodeListKnown, encodeFace)
+                    faceDis = face_recognition.face_distance(
+                        encodeListKnown, encodeFace
+                    )
                     # as we are giving list as input to faceDis we will get list as output
                     # We will get 3 output as we have given 3 input and the lowest will be the match
                     matchIndex = np.argmin(faceDis)
@@ -56,10 +59,25 @@ def gen_frames():  # generate frame by frame from camerapipe
                         name = Names[matchIndex].upper()
                         print(name)
                         y1, x2, y2, x1 = faceLoc
-                        y1, x2, y2, x1 = y1 * 4, x2 * 4, y2 * 4, x1 * 4  # since we resized it we are incrasing the size
+                        y1, x2, y2, x1 = (
+                            y1 * 4,
+                            x2 * 4,
+                            y2 * 4,
+                            x1 * 4,
+                        )  # since we resized it we are incrasing the size
                         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                        cv2.rectangle(frame, (x1, y2 - 35), (x2, y2), (0, 255, 0), cv2.FILLED)
-                        cv2.putText(frame, name, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
+                        cv2.rectangle(
+                            frame, (x1, y2 - 35), (x2, y2), (0, 255, 0), cv2.FILLED
+                        )
+                        cv2.putText(
+                            frame,
+                            name,
+                            (x1 + 6, y2 - 6),
+                            cv2.FONT_HERSHEY_COMPLEX,
+                            1,
+                            (255, 255, 255),
+                            2,
+                        )
 
             ret, buffer = cv2.imencode(".jpg", frame)
             frame = buffer.tobytes()
@@ -67,6 +85,7 @@ def gen_frames():  # generate frame by frame from camerapipe
 
 
 def feedView(request):
+    cv2.destroyAllWindows()
     try:
         return StreamingHttpResponse(
             gen_frames(), content_type="multipart/x-mixed-replace; boundary=frame"
@@ -99,4 +118,3 @@ def feedView(request):
 #         current_image = cv2.imwrite('opencv.png', gen_frames)
 #         print(current_image)
 #
-

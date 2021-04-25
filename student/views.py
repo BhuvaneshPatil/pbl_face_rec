@@ -2,15 +2,15 @@ from django.shortcuts import render, redirect
 from django.http import StreamingHttpResponse
 from django.core.files.images import ImageFile
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic.list import ListView
 import cv2
 import io
 import face_recognition
 from .models import Student
 
-camera = cv2.VideoCapture(0)
-
 
 def gen_frames():  # generate frame by frame from camerapipe
+    camera = cv2.VideoCapture(0)
     while True:
         # Capture frame-by-frame
         success, frame = camera.read()  # read the camera frame
@@ -24,6 +24,7 @@ def gen_frames():  # generate frame by frame from camerapipe
 
 # Create your views here.
 def demoShowFeed(request):
+    cv2.destroyAllWindows()
     return StreamingHttpResponse(
         gen_frames(), content_type="multipart/x-mixed-replace; boundary=frame"
     )
@@ -39,5 +40,13 @@ def addView(request):
         s = Student(rollNo=data["roll"], name=data["name"])
         s.photo = ImageFile(io.BytesIO(buffer.tobytes()), name="temp.jpg")
         s.save()
+        # camera.clear()
         return redirect("student:addView")
     return render(request, template_name="student/index.html")
+
+
+class StudentListView(ListView):
+    model = Student
+    template_name = "student/list.html"
+
+    pass
