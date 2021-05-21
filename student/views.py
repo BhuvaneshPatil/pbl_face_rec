@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.http import StreamingHttpResponse
 from django.core.files.images import ImageFile
 from django.views.decorators.csrf import csrf_exempt
@@ -32,6 +33,8 @@ def demoShowFeed(request):
 
 @csrf_exempt
 def addView(request):
+    camera = cv2.VideoCapture(0)
+
     if request.method == "POST":
         data = request.POST
         success, image = camera.read()
@@ -40,13 +43,14 @@ def addView(request):
         s = Student(rollNo=data["roll"], name=data["name"])
         s.photo = ImageFile(io.BytesIO(buffer.tobytes()), name="temp.jpg")
         s.save()
+        messages.SUCCESS(request, "Success Fully Added New Student")
         # camera.clear()
         return redirect("student:addView")
     return render(request, template_name="student/index.html")
 
 
 class StudentListView(ListView):
-    model = Student
     template_name = "student/list.html"
-
-    pass
+    queryset = Student.objects.all()
+    context_object_name = "students"
+    print()

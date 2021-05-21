@@ -18,6 +18,7 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: space-around;
+	margin-top: 40px;
 }
 .row > div {
 	/* border: 2px solid red; */
@@ -28,7 +29,7 @@ body {
 	flex: 1;
 	height: 70vh;
 	max-width: 50%;
-	background-color: #f3f3f3;
+	background-color: #f9f9f9;
 	padding: 50px;
 	display: flex;
 	flex-direction: column;
@@ -61,7 +62,7 @@ body {
 }
 .image-side {
 	flex: 1;
-	background-color: #f3f3f3;
+	background-color: #f9f9f9;
 	max-width: 50%;
 	/* padding: 30px; */
 	display: flex;

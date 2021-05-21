@@ -10,6 +10,7 @@ django = "*"
 pillow = "*"
 dlib = "*"
 face-detection = "*"
+django-cleanup = "*"
 
 [dev-packages]
 black = "*"

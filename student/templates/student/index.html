@@ -2,6 +2,8 @@
 <div class="row container shadow">
 	<div class="form-side">
 		<p class="form-title">Add Student To DataBase</p>
+		<div></div>
+
 		<form action="{% url 'student:addView' %}" method="post">
 			<div class="form-group">
 				<input
@@ -35,4 +37,5 @@
 		<img src="{% url 'student:demoFeed' %}" alt="Live Image" />
 	</div>
 </div>
+
 {% endblock add %}

@@ -94,6 +94,10 @@ def feedView(request):
         return HttpResponse("heh")
 
 
+def index(request):
+    return render(request, "feed/index.html")
+
+
 # @csrf_exempt
 # def index(request):
 #     # all_data = Student.objects.all()

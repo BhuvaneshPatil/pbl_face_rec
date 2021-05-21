@@ -1,14 +1,92 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Document</title>
-	</head>
-	<body>
-		{% for object in object_list %}
-		<h1>{{object.name|capfirst}}</h1>
-		{% endfor %}
-	</body>
-</html>
+{% extends 'feed/index.html' %} {% block content %}
+<section class="text-gray-600 body-font">
+	
+		<div class="lg:w-3/4 w-full mx-auto overflow-auto mt-5">
+			<table class="table-auto w-full text-left whitespace-no-wrap">
+				<thead>
+					<tr>
+						<th
+							class="
+								px-4
+								py-3
+								title-font
+								tracking-wider
+								font-medium
+								text-gray-900 text-sm
+								bg-gray-100
+								rounded-tl rounded-bl
+							"
+						>
+							Image
+						</th>
+						<th
+							class="
+								px-4
+								py-3
+								title-font
+								tracking-wider
+								font-medium
+								text-gray-900 text-sm
+								bg-gray-100
+							"
+						>
+							Name
+						</th>
+						<th
+							class="
+								px-4
+								py-3
+								title-font
+								tracking-wider
+								font-medium
+								text-gray-900 text-sm
+								bg-gray-100
+							"
+						>
+							Roll No.
+						</th>
+						<th
+							class="
+								px-4
+								py-3
+								title-font
+								tracking-wider
+								font-medium
+								text-gray-900 text-sm
+								bg-gray-100
+							"
+						>
+							Added at
+						</th>
+						<th
+							class="
+								px-4
+								py-3
+								title-font
+								tracking-wider
+								font-medium
+								text-gray-900 text-sm
+								bg-gray-100
+							"
+						>
+							Actions
+						</th>
+						
+					</tr>
+				</thead>
+				<tbody>
+				{% for student in students %}
+					<tr class="px-2 py-2">
+						<td class="px-3 py-1 flex content-center"><img alt="testimonial" class="w-20 h-20 object-cover object-center rounded-full  border-2 border-green-500 bg-green-500 align-middle" src="{{student.photo.url}}"></td>
+						<td class="px-3 py-1"> {{student.name|capfirst }}</td>
+						<td class="px-3 py-1">{{student.rollNo}}</td>
+						<td class="px-3 py-1">{{student.added_at}}</td>
+					</tr>
+				{% endfor %}
+					
+				</tbody>
+			</table>
+		</div>
+	</div>
+</section>
+{% endblock content %}

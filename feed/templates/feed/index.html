@@ -3,18 +3,21 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<title>Title</title>
+		<title>Face:Recognizer</title>
+		<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="{% static '/css/styles.css/' %}" />
 	</head>
 	<body>
-		<h1>Hi</h1>
-        {% block display %}
-        {% endblock display %}
+	{% include "feed/navbar.html" %}
+	{% block display %}
+	{% endblock display %}
+		{% block content %}
+		{% endblock content %}
 
 			{% comment %} <img src='{% url "feed:video" %}' /> {% endcomment %}
 		
-				{% block add %}
-                {% endblock add %}
+			{% block add %}
+			{% endblock add %}
 			</form>
 		</div>
 	</body>
