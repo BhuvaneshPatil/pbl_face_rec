@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.http import StreamingHttpResponse
+from django.db import IntegrityError
+from django.http import StreamingHttpResponse, HttpResponse
 from django.core.files.images import ImageFile
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.list import ListView
@@ -42,11 +43,37 @@ def addView(request):
         is_success, buffer = cv2.imencode(".jpg", image)
         s = Student(rollNo=data["roll"], name=data["name"])
         s.photo = ImageFile(io.BytesIO(buffer.tobytes()), name="temp.jpg")
-        s.save()
-        messages.SUCCESS(request, "Success Fully Added New Student")
+        try:
+            s.save()
+            messages.success(request, "Successfully Added New Student")
+        except IntegrityError:
+            messages.error(
+                request, f"Student with roll no {data['roll']} already exist"
+            )
+
         # camera.clear()
         return redirect("student:addView")
     return render(request, template_name="student/index.html")
+
+
+def updateView(request, id):
+    curr_student = Student.objects.get(id=id)
+    if request.method == "POST":
+        data = request.POST
+        s = Student.objects.get(pk=id)
+
+    return render(
+        request, template_name="student/update.html", context={"student": curr_student}
+    )
+
+
+def detailView(request, id):
+    curr_student = Student.objects.get(id=id)
+    return render(
+        request,
+        template_name="student/detailView.html",
+        context={"student": curr_student},
+    )
 
 
 class StudentListView(ListView):

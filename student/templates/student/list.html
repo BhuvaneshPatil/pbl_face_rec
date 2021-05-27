@@ -78,9 +78,20 @@
 				{% for student in students %}
 					<tr class="px-2 py-2">
 						<td class="px-3 py-1 flex content-center"><img alt="testimonial" class="w-20 h-20 object-cover object-center rounded-full  border-2 border-green-500 bg-green-500 align-middle" src="{{student.photo.url}}"></td>
-						<td class="px-3 py-1"> {{student.name|capfirst }}</td>
+						<td class="px-3 py-1"> 
+							<a href='{% url "student:detailView" student.id %}'>
+								{{student.name|capfirst }}</td>
+							</a>
 						<td class="px-3 py-1">{{student.rollNo}}</td>
 						<td class="px-3 py-1">{{student.added_at}}</td>
+						<td> 	
+						<a
+				class="mr-5 hover:text-gray-900"
+				href='{% url "student:updateView" student.id %}'
+				><button class="inline-flex text-white bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Update</button></a
+			> 
+						<button class="inline-flex text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Delete</button>
+						</td>
 					</tr>
 				{% endfor %}
 					

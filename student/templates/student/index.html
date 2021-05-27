@@ -1,8 +1,28 @@
 {% extends 'feed/index.html' %} {% block add %}
+<style>
+	.alert-box {
+		padding: 5px;
+		color: white;
+		border-radius: 5px;
+	}
+	.success {
+		background-color: #1eae98;
+	}
+	.error {
+		background-color: #f55c47;
+	}
+</style>
 <div class="row container shadow">
 	<div class="form-side">
 		<p class="form-title">Add Student To DataBase</p>
-		<div></div>
+
+		{% if messages %}
+		<ul class="messages">
+			{% for message in messages %}
+			<li class="{{ message.tags }} alert-box">{{ message }}</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
 
 		<form action="{% url 'student:addView' %}" method="post">
 			<div class="form-group">

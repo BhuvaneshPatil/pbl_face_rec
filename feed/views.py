@@ -8,7 +8,7 @@ from django.core.files.images import ImageFile
 from PIL import Image
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.files.base import ContentFile
-
+from .recognizer import gen_frames
 from . import defdata
 import face_recognition
 
@@ -18,84 +18,95 @@ import numpy as np
 # Create your views here.
 
 
-def gen_frames():  # generate frame by frame from camerapipe
-    camera = cv2.VideoCapture(0)  # use 0 for web camera
-    all_data = Student.objects.all()
-    print(len(all_data))
-    if len(all_data) > 0:
+# def gen_frames():  # generate frame by frame from camerapipe
+#     camera = cv2.VideoCapture(0)  # use 0 for web camera
+#     all_data = Student.objects.all()
+#     print(len(all_data))
+#     isFoundFlag = False
+#     if len(all_data) > 0:
 
-        images, Names = defdata.define(all_data)
-        print(Names)
-        encodeListKnown = defdata.encodings(images)
-        while True:
-            # Capture frame-by-frame
-            success, frame = camera.read()  # read the camera frame
-            if not success:
-                break
-            else:
-                imgS = cv2.resize(frame, (0, 0), None, 0.25, 0.25)
-                #  We can find multiple face so to give face locations and send it to encoding fucntion
-                #  Encoding the capured image
-                imgS = cv2.cvtColor(imgS, cv2.COLOR_BGR2RGB)
+#         images, Names = defdata.define(all_data)
+#         print(Names)
+#         encodeListKnown = defdata.encodings(images)
+#         while True:
+#             # Capture frame-by-frame
+#             success, frame = camera.read()  # read the camera frame
+#             if not success:
+#                 break
+#             else:
+#                 imgS = cv2.resize(frame, (0, 0), None, 0.25, 0.25)
+#                 #  We can find multiple face so to give face locations and send it to encoding fucntion
+#                 #  Encoding the capured image
+#                 imgS = cv2.cvtColor(imgS, cv2.COLOR_BGR2RGB)
 
-                faceCurr = face_recognition.face_locations(imgS)
-                encodeCurr = face_recognition.face_encodings(imgS, faceCurr)
+#                 faceCurr = face_recognition.face_locations(imgS)
+#                 encodeCurr = face_recognition.face_encodings(imgS, faceCurr)
 
-                # Finding matches
-                for encodeFace, faceLoc in zip(encodeCurr, faceCurr):
-                    # matches gives bollean output if which of the face is matching
-                    matches = face_recognition.compare_faces(
-                        encodeListKnown, encodeFace
-                    )
-                    # the lower the face disatnce the better the match is
-                    faceDis = face_recognition.face_distance(
-                        encodeListKnown, encodeFace
-                    )
-                    # as we are giving list as input to faceDis we will get list as output
-                    # We will get 3 output as we have given 3 input and the lowest will be the match
-                    matchIndex = np.argmin(faceDis)
+#                 # Finding matches
+#                 for encodeFace, faceLoc in zip(encodeCurr, faceCurr):
+#                     # matches gives bollean output if which of the face is matching
+#                     matches = face_recognition.compare_faces(
+#                         encodeListKnown, encodeFace
+#                     )
+#                     # the lower the face disatnce the better the match is
+#                     faceDis = face_recognition.face_distance(
+#                         encodeListKnown, encodeFace
+#                     )
+#                     # as we are giving list as input to faceDis we will get list as output
+#                     # We will get 3 output as we have given 3 input and the lowest will be the match
+#                     matchIndex = np.argmin(faceDis)
 
-                    if matches[matchIndex]:
-                        name = Names[matchIndex].upper()
-                        print(name)
-                        y1, x2, y2, x1 = faceLoc
-                        y1, x2, y2, x1 = (
-                            y1 * 4,
-                            x2 * 4,
-                            y2 * 4,
-                            x1 * 4,
-                        )  # since we resized it we are incrasing the size
-                        cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                        cv2.rectangle(
-                            frame, (x1, y2 - 35), (x2, y2), (0, 255, 0), cv2.FILLED
-                        )
-                        cv2.putText(
-                            frame,
-                            name,
-                            (x1 + 6, y2 - 6),
-                            cv2.FONT_HERSHEY_COMPLEX,
-                            1,
-                            (255, 255, 255),
-                            2,
-                        )
+#                     if matches[matchIndex]:
+#                         name = Names[matchIndex].upper()
+#                         print(name)
+#                         isFoundFlag = True
+#                         y1, x2, y2, x1 = faceLoc
+#                         y1, x2, y2, x1 = (
+#                             y1 * 4,
+#                             x2 * 4,
+#                             y2 * 4,
+#                             x1 * 4,
+#                         )  # since we resized it we are incrasing the size
+#                         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+#                         cv2.rectangle(
+#                             frame, (x1, y2 - 35), (x2, y2), (0, 255, 0), cv2.FILLED
+#                         )
+#                         cv2.putText(
+#                             frame,
+#                             name,
+#                             (x1 + 6, y2 - 6),
+#                             cv2.FONT_HERSHEY_COMPLEX,
+#                             1,
+#                             (255, 255, 255),
+#                             2,
+#                         )
 
-            ret, buffer = cv2.imencode(".jpg", frame)
-            frame = buffer.tobytes()
-            yield b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n"
+#             ret, buffer = cv2.imencode(".jpg", frame)
+#             frame = buffer.tobytes()
+#             yield b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n", isFoundFlag
 
 
 def feedView(request):
-    cv2.destroyAllWindows()
-    try:
-        return StreamingHttpResponse(
-            gen_frames(), content_type="multipart/x-mixed-replace; boundary=frame"
-        )
-    except:
-        return HttpResponse("heh")
+    allStudents = Student.objects.all()
+    found_studs = gen_frames()
+    student_array = []
+    for each in found_studs:
+        student_array.append(Student.objects.get(rollNo=each))
+    print(student_array)
+    return render(request, "feed/display_reco.html", {"students": student_array})
+
+
+def detectView(request):
+    fun, isFound = gen_frames()
+    if isFound:
+        value = 0
+    else:
+        value = 1
+    return render(request, "feed/videoView.html")
 
 
 def index(request):
-    return render(request, "feed/index.html")
+    return render(request, "feed/hero.html")
 
 
 # @csrf_exempt

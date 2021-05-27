@@ -1,0 +1,113 @@
+{% extends "feed/index.html" %}{% block content %}
+<section class="text-gray-600 body-font">
+	<div
+		class="
+			container
+			mx-auto
+			flex
+			px-5
+			py-10
+			items-center
+			justify-center
+			flex-col
+		"
+	>
+		<div class="text-center lg:w-2/3 w-full py-5">
+			<h1
+				class="
+					title-font
+					sm:text-4xl
+					text-3xl
+					mb-4
+					font-medium
+					text-gray-900
+				"
+			>
+				Student Details
+			</h1>
+		</div>
+		<img
+			class="
+				lg:w-2/6
+				md:w-3/6
+				w-5/6
+				mb-10
+				object-cover object-center
+				rounded
+			"
+			alt="hero"
+			src="{{student.photo.url}}"
+		/>
+		<div class="text-center lg:w-2/3 w-full">
+			<div class="lg:w-2/3 w-full mx-auto overflow-auto">
+				<table class="table-auto w-full text-center whitespace-no-wrap">
+					<tbody>
+						<tr>
+							<td class="px-4 py-3">
+								<strong> Name </strong>
+							</td>
+							<td class="px-4 py-3">{{student.name}}</td>
+						</tr>
+						<tr>
+							<td class="px-4 py-3">
+								<strong> Roll No. </strong>
+							</td>
+							<td class="px-4 py-3">{{student.rollNo}}</td>
+						</tr>
+						<tr>
+							<td class="px-4 py-3">
+								<strong> Added At </strong>
+							</td>
+							<td class="px-4 py-3">{{student.added_at}}</td>
+						</tr>
+						<tr>
+							<td class="px-4 py-3">
+								<strong> Last edited </strong>
+							</td>
+							<td class="px-4 py-3">{{student.updated_at}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div class="flex justify-center py-5">
+				<a href="{% url 'student:updateView' student.id %}">
+					<button
+						class="
+							inline-flex
+							text-white
+							bg-green-500
+							border-0
+							py-2
+							px-6
+							focus:outline-none
+							hover:bg-indigo-600
+							rounded
+							text-lg
+						"
+					>
+						Update
+					</button>
+				</a>
+				<button
+					class="
+						ml-4
+						inline-flex
+						text-white
+						bg-red-700
+						border-0
+						py-2
+						px-6
+						focus:outline-none
+						hover:bg-gray-200
+						rounded
+						text-lg
+					"
+				>
+					Delete
+				</button>
+			</div>
+		</div>
+	</div>
+</section>
+{% endblock content %}
