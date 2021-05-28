@@ -90,7 +90,10 @@
 				href='{% url "student:updateView" student.id %}'
 				><button class="inline-flex text-white bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Update</button></a
 			> 
-						<button class="inline-flex text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Delete</button>
+						<a
+				class="mr-5 hover:text-gray-900"
+				href='{% url "student:deleteView" student.id %}'
+				><button class="inline-flex text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Delete</button></a>
 						</td>
 					</tr>
 				{% endfor %}

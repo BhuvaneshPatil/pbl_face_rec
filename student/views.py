@@ -76,6 +76,10 @@ def detailView(request, id):
     )
 
 
+def deleteView(request, id):
+    return render(request, "student/delete_view.html")
+
+
 class StudentListView(ListView):
     template_name = "student/list.html"
     queryset = Student.objects.all()
