@@ -74,6 +74,7 @@
 				<a href="{% url 'student:updateView' student.id %}">
 					<button
 						class="
+							mx-4
 							inline-flex
 							text-white
 							bg-green-500
@@ -89,23 +90,26 @@
 						Update
 					</button>
 				</a>
-				<button
-					class="
-						ml-4
-						inline-flex
-						text-white
-						bg-red-700
-						border-0
-						py-2
-						px-6
-						focus:outline-none
-						hover:bg-gray-200
-						rounded
-						text-lg
-					"
+				<a
+					class="mr-5 hover:text-gray-900"
+					href='{% url "student:deleteView" student.id %}'
+					><button
+						class="
+							inline-flex
+							text-white
+							bg-red-500
+							border-0
+							py-2
+							px-6
+							focus:outline-none
+							hover:bg-indigo-600
+							rounded
+							text-lg
+						"
+					>
+						Delete
+					</button></a
 				>
-					Delete
-				</button>
 			</div>
 		</div>
 	</div>

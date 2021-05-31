@@ -1,8 +1,74 @@
 {% extends "feed/index.html" %} {% block content %}
-<div class="">
-	{% for student in students %}
-	<p>{{student.name}} - {{student.rollNo}}</p>
-
-	{% endfor %}
-</div>
-{% endblock content %}
+<section class="text-gray-600 body-font">
+	<div class="lg:w-3/4 w-full mx-auto overflow-auto mt-5">
+		{% if found %}
+		<h1 style="margin-bottom: 10px;">
+			Recognized Students
+		</h1>
+		<table class="table-auto w-full text-left whitespace-no-wrap">
+			<thead>
+				<tr>
+					<th
+					class="
+					px-4
+					py-3
+					title-font
+					tracking-wider
+					font-medium
+					text-gray-900 text-sm
+					bg-gray-100
+					rounded-tl rounded-bl
+					"
+					>
+					Image
+				</th>
+				<th
+				class="
+				px-4
+				py-3
+				title-font
+				tracking-wider
+				font-medium
+				text-gray-900 text-sm
+				bg-gray-100
+				"
+				>
+				Name
+			</th>
+			<th
+			class="
+			px-4
+			py-3
+			title-font
+			tracking-wider
+			font-medium
+			text-gray-900 text-sm
+			bg-gray-100
+			"
+			>
+			Roll No.
+		</th>
+		
+		</tr>
+				</thead>
+				<tbody>
+					
+					{% for student in students %}
+					<tr class="px-2 py-2">
+						<td class="px-3 py-1 flex content-center"><img alt="testimonial" class="w-20 h-20 object-cover object-center rounded-full  border-2 border-green-500 bg-green-500 align-middle" src="{{student.photo.url}}"></td>
+						<td class="px-3 py-1"> 
+							<a href='{% url "student:detailView" student.id %}'>
+								{{student.name|capfirst }}</td>
+							</a>
+							<td class="px-3 py-1">{{student.rollNo}}</td>
+						</tr>
+						{% endfor %}					  
+					</tbody>
+				</table>
+		{% else %}
+			<h1>No student recognized</h1>
+		{% endif %}
+		</div>
+</section>
+	{% endblock content %}
+	

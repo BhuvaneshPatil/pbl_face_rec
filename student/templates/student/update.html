@@ -6,7 +6,7 @@
 			mx-auto
 			flex flex-col
 			px-5
-			py-24
+			py-5
 			justify-center
 			items-center
 			text-green-500
@@ -52,7 +52,7 @@
 				{{student.name}}
 			</h1>
 			<div class="form-side">
-				<p class="form-title">Add Student To DataBase</p>
+				<p class="form-title">Update Students</p>
 
 				{% if messages %}
 				<ul class="messages">
@@ -62,25 +62,70 @@
 				</ul>
 				{% endif %}
 
-				<form action="{% url 'student:addView' %}" method="post">
-					<div class="form-group">
+				<form
+					action="{% url  'student:updateView' student.id %}"
+					method="post"
+				>
+					{% csrf_token %}
+					<div class="mb-4">
+						<label
+							class="block text-gray-700 text-sm font-bold mb-2"
+							for="username"
+						>
+							Student Name
+						</label>
 						<input
-							type="text"
 							name="name"
-							placeholder="Enter the name"
 							required
-						/>
-					</div>
-					{% comment %} <br />
-					{% endcomment %}
-					<div class="form-group">
-						<input
+							value="{{student.name}}"
+							class="
+								shadow
+								appearance-none
+								border
+								rounded
+								w-full
+								py-2
+								px-3
+								text-gray-700
+								leading-tight
+								focus:outline-none
+								focus:shadow-outline
+							"
+							id="username"
 							type="text"
-							name="roll"
-							placeholder="Enter roll no"
-							required
+							placeholder="Student Name"
 						/>
 					</div>
+					<div class="mb-4">
+						<label
+							class="block text-gray-700 text-sm font-bold mb-2"
+							for="username"
+						>
+							Roll No
+						</label>
+						<input
+							name="roll"
+							value="{{student.rollNo}}"
+							disabled
+							class="
+								shadow
+								appearance-none
+								border
+								rounded
+								w-full
+								py-2
+								px-3
+								text-gray-700
+								leading-tight
+								focus:outline-none
+								focus:shadow-outline
+							"
+							id="username"
+							type="text"
+							placeholder="Roll No"
+						/>
+					</div>
+
 					<div class="form-group btn-group">
 						<button
 							type="submit"

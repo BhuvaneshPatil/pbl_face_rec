@@ -10,4 +10,5 @@ urlpatterns = [
     path("update/<int:id>/", views.updateView, name="updateView"),
     path("detail/<int:id>/", views.detailView, name="detailView"),
     path("delete/<int:id>/", views.deleteView, name="deleteView"),
+    path("delete-action/<int:id>/", views.deleteActionView, name="deleteAction"),
 ]

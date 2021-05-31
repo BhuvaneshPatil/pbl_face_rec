@@ -1,7 +1,27 @@
 {% extends 'feed/index.html' %} {% block content %}
+<style>
+	.alert-box {
+		padding: 8px;
+		color: white;
+		border-radius: 5px;
+		margin-bottom: 10px;
+	}
+	.success {
+		background-color: #1eae98;
+	}
+	.error {
+		background-color: #f55c47;
+	}
+</style>
 <section class="text-gray-600 body-font">
-	
-		<div class="lg:w-3/4 w-full mx-auto overflow-auto mt-5">
+		<div class="lg:w-3/4 w-full mx-auto mt-5">
+		{% if messages %}
+			<ul class="messages">
+				{% for message in messages %}
+				<li class="{{ message.tags }} alert-box">{{ message }}</li>
+				{% endfor %}
+			</ul>
+		{% endif %}
 			<table class="table-auto w-full text-left whitespace-no-wrap">
 				<thead>
 					<tr>

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
 from django.db import IntegrityError
 from django.http import StreamingHttpResponse, HttpResponse
@@ -56,11 +56,19 @@ def addView(request):
     return render(request, template_name="student/index.html")
 
 
+@csrf_exempt
 def updateView(request, id):
     curr_student = Student.objects.get(id=id)
     if request.method == "POST":
         data = request.POST
         s = Student.objects.get(pk=id)
+        s.name = data["name"]
+        s.save()
+        messages.success(
+            request,
+            "Successfully Updated - {} ({})".format(s.name, s.rollNo),
+        )
+        return redirect(reverse("student:studentList"))
 
     return render(
         request, template_name="student/update.html", context={"student": curr_student}
@@ -77,7 +85,21 @@ def detailView(request, id):
 
 
 def deleteView(request, id):
-    return render(request, "student/delete_view.html")
+    curr_student = Student.objects.get(id=id)
+    return render(
+        request, "student/delete_view.html", context={"student": curr_student}
+    )
+
+
+def deleteActionView(request, id):
+    curr_student = Student.objects.get(id=id)
+    context = {"student": curr_student, "deleted": True}
+    messages.success(
+        request,
+        "Successfully Deleted - {} ({})".format(curr_student.name, curr_student.rollNo),
+    )
+    curr_student.delete()
+    return redirect(reverse("student:studentList"))
 
 
 class StudentListView(ListView):

@@ -25,7 +25,7 @@ body {
 .form-side {
 	flex: 1;
 	height: 70vh;
-	max-width: 50%;
+	/* max-width: 50%; */
 	background-color: #f9f9f9;
 	padding: 50px;
 	display: flex;

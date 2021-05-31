@@ -90,10 +90,16 @@ def feedView(request):
     allStudents = Student.objects.all()
     found_studs = gen_frames()
     student_array = []
+    found = False
     for each in found_studs:
         student_array.append(Student.objects.get(rollNo=each))
+    if len(student_array) != 0:
+        found = True
     print(student_array)
-    return render(request, "feed/display_reco.html", {"students": student_array})
+    print(found)
+    return render(
+        request, "feed/display_reco.html", {"students": student_array, "found": found}
+    )
 
 
 def detectView(request):
